@@ -11,6 +11,7 @@ const modalContent = document.getElementById('modalContent');
 const closeModal = document.querySelector('.close');
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
+const backToTop = document.getElementById('backToTop');
 
 // Theme management
 let currentTheme = localStorage.getItem('theme') || 'system';
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScrollAnimations();
     initializeModal();
     initializeSkillTags();
+    initializeBackToTop();
 });
 
 // Theme functionality
@@ -730,3 +732,34 @@ initializeTypingEffect();
 // Export functions for global access
 window.openModal = openModal;
 window.scrollToSection = scrollToSection;
+
+// Back to Top functionality
+function initializeBackToTop() {
+    // Show/hide back to top button based on scroll position
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    // Smooth scroll to top when button is clicked
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Keyboard accessibility
+    backToTop.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
