@@ -18,6 +18,61 @@
     --border-radius: 12px;
 }
 
+/* Light theme variables */
+[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
+    --border-color: #dee2e6;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark theme variables (explicit) */
+[data-theme="dark"] {
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #888888;
+    --border-color: #333333;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* System preference detection */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-tertiary: #e9ecef;
+        --text-primary: #212529;
+        --text-secondary: #6c757d;
+        --text-muted: #adb5bd;
+        --border-color: #dee2e6;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --bg-primary: #0f0f0f;
+        --bg-secondary: #1a1a1a;
+        --bg-tertiary: #2d2d2d;
+        --text-primary: #ffffff;
+        --text-secondary: #b3b3b3;
+        --text-muted: #888888;
+        --border-color: #333333;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+}
+
 /* Global Styles */
 * {
     margin: 0;
@@ -80,6 +135,10 @@ body {
     transition: var(--transition);
 }
 
+[data-theme="light"] .navbar {
+    background: rgba(255, 255, 255, 0.95);
+}
+
 .nav-container {
     display: flex;
     justify-content: space-between;
@@ -102,6 +161,7 @@ body {
     display: flex;
     list-style: none;
     gap: 2rem;
+    align-items: center;
 }
 
 .nav-link {
@@ -131,6 +191,35 @@ body {
 .nav-link:hover::after,
 .nav-link.active::after {
     width: 100%;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-left: 1rem;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-tertiary);
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-color);
 }
 
 /* Hamburger Menu */
@@ -394,8 +483,6 @@ body {
     width: 18px;
     font-size: 1rem;
 }
-
-
 
 /* Experience Section */
 .experience {
@@ -916,12 +1003,18 @@ body {
         width: 100%;
         text-align: center;
         transition: 0.3s;
-        box-shadow: var(--shadow);
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
         padding: 2rem 0;
+        gap: 1rem;
     }
 
     .nav-menu.active {
         left: 0;
+    }
+
+    .theme-toggle {
+        margin-left: 0;
+        margin-top: 1rem;
     }
 
     .hamburger {
@@ -952,30 +1045,32 @@ body {
     }
 
     .timeline::before {
-        left: 30px;
+        left: 31px;
     }
 
     .timeline-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-left: 60px;
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 0;
     }
 
     .timeline-item:nth-child(odd) {
-        flex-direction: column;
+        padding-left: 70px;
+        padding-right: 0;
     }
 
     .timeline-item:nth-child(odd) .timeline-content {
-        text-align: left;
+        margin-left: 0;
     }
 
     .timeline-date {
         position: absolute;
-        left: 0;
+        left: -70px;
         top: 0;
-        min-width: auto;
-        padding: 0.5rem;
+        width: 60px;
+        text-align: center;
         font-size: 0.9rem;
+        padding: 0.5rem;
     }
 
     .projects-grid {

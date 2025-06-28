@@ -9,9 +9,15 @@ const contactForm = document.getElementById('contactForm');
 const modal = document.getElementById('projectModal');
 const modalContent = document.getElementById('modalContent');
 const closeModal = document.querySelector('.close');
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+
+// Theme management
+let currentTheme = localStorage.getItem('theme') || 'system';
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    initializeTheme();
     initializeNavigation();
     initializeProjectFilters();
     initializeContactForm();
@@ -19,6 +25,57 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeModal();
     initializeSkillTags();
 });
+
+// Theme functionality
+function initializeTheme() {
+    // Set initial theme
+    setTheme(currentTheme);
+    
+    // Add event listener for theme toggle
+    themeToggle.addEventListener('click', toggleTheme);
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (currentTheme === 'system') {
+            setTheme('system');
+        }
+    });
+}
+
+function setTheme(theme) {
+    currentTheme = theme;
+    localStorage.setItem('theme', theme);
+    
+    if (theme === 'system') {
+        // Remove explicit theme and let CSS handle system preference
+        document.documentElement.removeAttribute('data-theme');
+        updateThemeIcon('system');
+    } else {
+        // Set explicit theme
+        document.documentElement.setAttribute('data-theme', theme);
+        updateThemeIcon(theme);
+    }
+    
+    // Update navbar background
+    updateNavbarBackground();
+}
+
+function toggleTheme() {
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+}
+
+function updateThemeIcon(theme) {
+    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDark) {
+        themeIcon.className = 'fas fa-sun';
+        themeToggle.setAttribute('aria-label', 'Switch to light mode');
+    } else {
+        themeIcon.className = 'fas fa-moon';
+        themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+    }
+}
 
 // Navigation functionality
 function initializeNavigation() {
@@ -34,6 +91,12 @@ function initializeNavigation() {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
         });
+    });
+
+    // Close mobile menu when clicking on theme toggle
+    themeToggle.addEventListener('click', function() {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
     });
 
     // Smooth scrolling for navigation links
@@ -80,10 +143,20 @@ function updateActiveNavLink() {
 
 // Update navbar background on scroll
 function updateNavbarBackground() {
+    const isDark = currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
     if (window.scrollY > 100) {
-        navbar.style.background = 'rgba(15, 15, 15, 0.98)';
+        if (isDark) {
+            navbar.style.background = 'rgba(15, 15, 15, 0.98)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        }
     } else {
-        navbar.style.background = 'rgba(15, 15, 15, 0.95)';
+        if (isDark) {
+            navbar.style.background = 'rgba(15, 15, 15, 0.95)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        }
     }
 }
 
